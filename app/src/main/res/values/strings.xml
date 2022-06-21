@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">PracticleOne</string>
+    <string name="input_error">Введите элемент</string>
+</resources>
