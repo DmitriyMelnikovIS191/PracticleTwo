@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">PracticleOne</string>
     <string name="input_error">Введите элемент</string>
+    <string name="phone_error">Не корректный номер телефона</string>
+    <string name="accept_relode">Данные сохранены</string>
+    <string name="error_add_user">Заполните поля</string>
 </resources>

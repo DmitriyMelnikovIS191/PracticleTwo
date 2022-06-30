@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserProfileActivity">
+
+    <TextView
+        android:id="@+id/textViewFirstName"
+        android:layout_width="218dp"
+        android:layout_height="22dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Фамилия"
+        app:layout_constraintLeft_toRightOf="@id/imageView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/InputFirstName"
+        android:layout_width="218dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toRightOf="@id/imageView"
+        app:layout_constraintTop_toTopOf="@id/textViewFirstName"
+        tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <TextView
+        android:id="@+id/textViewName"
+        android:layout_width="218dp"
+        android:layout_height="22dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="48dp"
+        android:text="Имя"
+        app:layout_constraintLeft_toRightOf="@id/imageView"
+        app:layout_constraintTop_toTopOf="@id/InputFirstName"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/InputName"
+        android:layout_width="218dp"
+        android:layout_height="48dp"
+        android:layout_below="@+id/textViewName"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toRightOf="@id/imageView"
+        app:layout_constraintTop_toTopOf="@id/textViewName"
+        tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewSecondName"
+        android:layout_width="218dp"
+        android:layout_height="22dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="48dp"
+        android:text="Отчество"
+        app:layout_constraintLeft_toRightOf="@id/imageView"
+        app:layout_constraintTop_toTopOf="@id/InputName"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/InputSecondName"
+        android:layout_width="218dp"
+        android:layout_height="48dp"
+        android:layout_below="@+id/textViewName"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+
+        app:layout_constraintLeft_toRightOf="@id/imageView"
+        app:layout_constraintTop_toTopOf="@id/textViewSecondName"
+        tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewPhone"
+        android:layout_width="218dp"
+        android:layout_height="22dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="48dp"
+        android:text="Номер телефона"
+        app:layout_constraintLeft_toRightOf="@id/imageView"
+        app:layout_constraintTop_toTopOf="@id/InputSecondName"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/InputPhone"
+        android:layout_width="218dp"
+        android:layout_height="48dp"
+        android:layout_below="@+id/textViewName"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:digits="0123456789+"
+        android:maxLength="12"
+        android:inputType="number"
+        app:layout_constraintLeft_toRightOf="@id/imageView"
+        app:layout_constraintTop_toTopOf="@id/textViewPhone"
+        tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="144dp"
+        android:layout_height="287dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_camera"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/ButtonBack"
+        android:layout_width="157dp"
+        android:layout_height="52dp"
+        android:layout_below="@+id/imageView"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="584dp"
+        android:text="Назад"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/ButtonSave"
+        android:layout_width="155dp"
+        android:layout_height="51dp"
+        android:layout_below="@+id/imageView"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="584dp"
+        android:layout_marginEnd="23dp"
+        android:text="Сохранить"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/ButtonBack"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
