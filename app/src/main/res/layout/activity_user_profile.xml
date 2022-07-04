@@ -135,4 +135,18 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
+    <Button
+        android:id="@+id/btcall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Вызов"
+        app:layout_constraintBottom_toTopOf="@+id/ButtonBack"
+        app:layout_constraintEnd_toEndOf="@+id/ButtonSave"
+        app:layout_constraintHorizontal_bias="0.518"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/InputPhone"
+        app:layout_constraintVertical_bias="0.872"
+        tools:ignore="MissingConstraints" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

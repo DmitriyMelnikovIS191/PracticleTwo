@@ -11,7 +11,7 @@ public class User {
     public String Picture;
 
 
-    User(String Name, String FirstName, String SecondName, String PhoneNumber, String Picture)
+   public User(String Name, String FirstName, String SecondName, String PhoneNumber, String Picture)
     {
         this.Name=Name;
         this.FirstName=FirstName;

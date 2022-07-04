@@ -20,6 +20,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.practicleone.db.MyDBManager;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,8 +36,10 @@ public class UserProfileActivity extends AppCompatActivity {
     private EditText InputPhone;
     private Button ButtonBack;
     private Button ButtonSave;
+    private Button btcall;
     private ImageView imageView;
     private Bitmap bitmap = null;
+    private MyDBManager myDBManager;
 
     int pos = -1 ;
     User user;
@@ -46,7 +50,7 @@ public class UserProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-
+        myDBManager=new MyDBManager(this);
         //инициализация объектов дизайна
         InputFirstName=findViewById(R.id.InputFirstName);
         InputName=findViewById(R.id.InputName);
@@ -55,22 +59,19 @@ public class UserProfileActivity extends AppCompatActivity {
         ButtonBack=findViewById(R.id.ButtonBack);
         ButtonSave=findViewById(R.id.ButtonSave);
         imageView= (ImageView) findViewById(R.id.imageView);
+        btcall=findViewById(R.id.btcall);
+
 
         //вывод при открытии
         Bundle arguments = getIntent().getExtras();
         if(arguments!=null){
             pos = (int) arguments.get("Size");
-
-                if(arguments.containsKey("NameUser")||arguments.containsKey("FirstNameUser")||arguments.containsKey("SecondNameUser")
-                        ||arguments.containsKey("PhoneNumberUser")||arguments.containsKey("ImageUser")) {
-                    String Name = arguments.get("NameUser").toString();
-                    String FirstName = arguments.get("FirstNameUser").toString();
-                    String SecondNameUser = arguments.get("SecondNameUser").toString();
-                    String PhoneNumberUser = arguments.get("PhoneNumberUser").toString();
-                    String ImageUser = arguments.get("ImageUser").toString();
-
-                    user = new User(Name, FirstName, SecondNameUser, PhoneNumberUser, ImageUser);
-
+                if(arguments.containsKey("FIO")) {
+                    String FAM = arguments.get("FIO").toString();
+                    String[] words = FAM.split(" ");
+                    myDBManager.openDB();
+                    user =  myDBManager.readPersonalInf(words[0],words[1]);
+                    btcall.setVisibility(View.VISIBLE);
                     InputName.setText(user.Name);
                     InputFirstName.setText(user.FirstName);
                     InputSecondName.setText(user.SecondName);
@@ -104,6 +105,16 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
 
+        //вызов
+        btcall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText number=(EditText)findViewById(R.id.InputPhone);
+                String toDial="tel:"+number.getText().toString();
+                startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse(toDial)));
+            }
+        });
+
         //сохранение пользователя
         ButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,14 +136,13 @@ public class UserProfileActivity extends AppCompatActivity {
                         String FirstNameUser=InputFirstName.getText().toString().trim();
                         String SecondNameUser=InputSecondName.getText().toString().trim();
 
-                        intent.putExtra("PhoneNumberUser", PhoneNumberUser);
-                        intent.putExtra("NameUser", NameUser);
-                        intent.putExtra("FirstNameUser", FirstNameUser);
-                        intent.putExtra("SecondNameUser", SecondNameUser);
-
                         bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
                         path=createImageFromBitmap(bitmap);
-                        intent.putExtra("Picture", path);
+                        //здесь запись в БД
+                        if(myDBManager.CheckUser(FirstNameUser,NameUser,SecondNameUser,PhoneNumberUser))
+                            myDBManager.UpdateUserINF(FirstNameUser,NameUser,SecondNameUser,PhoneNumberUser);
+                        else
+                        myDBManager.insertDB(NameUser,FirstNameUser,SecondNameUser,PhoneNumberUser,path);
 
                         setResult(1,intent);
                         closedActivity();
@@ -150,6 +160,16 @@ public class UserProfileActivity extends AppCompatActivity {
 
     static final int GALLERY_REQUEST = 1;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        myDBManager.openDB();
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        myDBManager.closeDB();
+    }
     //загрузка изображения
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
