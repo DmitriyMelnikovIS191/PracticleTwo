@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:hint="Поиск"
-        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/countriesList"
+        app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <Button
@@ -19,19 +20,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
-        android:layout_marginTop="600dp"
+        android:layout_marginTop="596dp"
         android:text="Создать"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="49dp" />
 
     <ListView
         android:id="@+id/countriesList"
         android:layout_width="415dp"
-        android:layout_height="520dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="500dp"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="-4dp"></ListView>
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="MissingConstraints"></ListView>
+
+    <Button
+        android:id="@+id/button2"
+        android:text="Импорт"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="importList"
+        app:layout_constraintStart_toStartOf="@+id/txtsearch"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/buttonexp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Экспорт"
+        app:layout_constraintEnd_toEndOf="@+id/txtsearch"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/txtsearch"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

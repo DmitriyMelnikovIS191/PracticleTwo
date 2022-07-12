@@ -57,14 +57,32 @@ public class MyDBManager {
 
         Cursor cursor = db.rawQuery("select * FROM Contact where FirstName = '"+Family+"' AND Name ='"+ NameUser+"'", null);
         while (cursor.moveToNext()){
+            int IDUser = cursor.getInt(cursor.getColumnIndexOrThrow(MyConstants._ID));
             String Name = cursor.getString(cursor.getColumnIndexOrThrow(MyConstants.Name));
             String FirstName = cursor.getString(cursor.getColumnIndexOrThrow(MyConstants.FirstName));
             String SecondName = cursor.getString(cursor.getColumnIndexOrThrow(MyConstants.SecondName));
             String PhoneNumber = cursor.getString(cursor.getColumnIndexOrThrow(MyConstants.PhoneNumber));
             String Picture = cursor.getString(cursor.getColumnIndexOrThrow(MyConstants.Picture));
 
-           user = new User(Name,FirstName,SecondName,PhoneNumber,Picture);
+           user = new User(IDUser,Name,FirstName,SecondName,PhoneNumber,Picture);
 
+
+        }
+        cursor.close();
+        return user;
+    }
+
+    public ArrayList<User> getPerson(){
+        ArrayList<User> user = new ArrayList<>();
+        Cursor cursor = db.rawQuery("select * FROM Contact", null);
+        while (cursor.moveToNext()){
+            int IDUser = cursor.getInt(cursor.getColumnIndexOrThrow(MyConstants._ID));
+            String Name = cursor.getString(cursor.getColumnIndexOrThrow(MyConstants.Name));
+            String FirstName = cursor.getString(cursor.getColumnIndexOrThrow(MyConstants.FirstName));
+            String SecondName = cursor.getString(cursor.getColumnIndexOrThrow(MyConstants.SecondName));
+            String PhoneNumber = cursor.getString(cursor.getColumnIndexOrThrow(MyConstants.PhoneNumber));
+            String Picture = cursor.getString(cursor.getColumnIndexOrThrow(MyConstants.Picture));
+            user.add(new User(IDUser,Name,FirstName,SecondName,PhoneNumber,Picture));
 
         }
         cursor.close();
@@ -73,6 +91,13 @@ public class MyDBManager {
 
     public void DeleteFromDB(String Family, String NameUser){
         db.execSQL("DELETE FROM Contact where FirstName = '"+Family+"' AND Name ='"+ NameUser+"'");
+
+    }
+
+    public void delete(int ID){
+        String whereClause = "_id = ?";
+        String[] whereArgs = new String[]{String.valueOf(ID)};
+        db.delete(MyConstants.TABLE_NAME,whereClause, whereArgs);
 
     }
 
@@ -91,6 +116,17 @@ public class MyDBManager {
 
     public void UpdateUserINF(String Family, String NameUser, String SecondName, String PhoneNumber){
         db.execSQL("UPDATE Contact SET FirstName = '"+Family+"' , Name ='"+ NameUser+"' , SecondName ='"+ SecondName +"' , PhoneNumber ='" + PhoneNumber +"'  where Name ='"+ NameUser+"' AND SecondName ='"+ SecondName +"' AND FirstName ='"+ Family +"'\"");
+    }
+
+    public long insert(User user){
+
+        ContentValues cv = new ContentValues();
+        cv.put(MyConstants.Name,user.Name);
+        cv.put(MyConstants.FirstName,user.FirstName);
+        cv.put(MyConstants.SecondName,user.SecondName);
+        cv.put(MyConstants.PhoneNumber,user.PhoneNumber);
+        cv.put(MyConstants.Picture,user.Picture);
+        return db.insert(MyConstants.TABLE_NAME,null,cv);
     }
 
     public void closeDB(){

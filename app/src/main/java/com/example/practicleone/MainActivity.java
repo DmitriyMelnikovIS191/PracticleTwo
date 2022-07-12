@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Editable;
@@ -21,18 +22,21 @@ import android.widget.Toast;
 
 import com.example.practicleone.db.MyDBManager;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity {
     ArrayAdapter<String> adapter ;
     String[] SearchUser;
-    List<User> Users = new ArrayList<User>();
+    ArrayList<User> Users = new ArrayList<User>();
     List<String> Client = new ArrayList<String>();
     List<String> NEWClient = new ArrayList<String>();
     private Button buttonadd;
+    private Button buttonexp;
     private ListView output_elements;
     private EditText txtsearch;
     private int lastposition;
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         output_elements = findViewById(R.id.countriesList);
         buttonadd = findViewById(R.id.button);
         txtsearch = findViewById(R.id.txtsearch);
+        buttonexp=findViewById(R.id.buttonexp);
 
         buttonadd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +64,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        buttonexp.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, OpenDirActivity.class);
+                startActivityForResult(intent, 2);
+            }
+        });
+
+
         output_elements.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -68,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("Size", position);
                 intent.putExtra("FIO",FIO);
 
-                startActivityForResult(intent,2);
+                startActivityForResult(intent,1);
             }
         });
         output_elements.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -130,6 +145,15 @@ public class MainActivity extends AppCompatActivity {
 
         });
     }
+
+    public void importList(View view)
+    {
+        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+        chooseFile.setType("*/*");
+        chooseFile = Intent.createChooser(chooseFile, "Выберите список контактов");
+        startActivityForResult(chooseFile, 1);
+
+    }
     public void searchItem(String textToSearch){
         for(String item:SearchUser){
             if(!item.contains(textToSearch)){
@@ -189,25 +213,40 @@ public class MainActivity extends AppCompatActivity {
                     //ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, Client);
                     output_elements.setAdapter(adapter);
                 break;
+                case RESULT_OK:
+                    Uri uri = data.getData();
+                    myDBManager.openDB();
+                    for (User user: myDBManager.getPerson()) {
+                        myDBManager.delete(user.getId());
+                    }
+                    for (User user: fileWorker.importPersons(fileWorker.getPathFromUri(this,uri))) {
+                        myDBManager.insert(user);
+                    }
+                    myDBManager.closeDB();
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Контакты загружены", Toast.LENGTH_SHORT);
+                    toast.show();
+                    break;
             }
         }
         else if (requestCode == 2) {
-            switch (resultCode) {
-                case 0:
-                    super.onResume();
-                    break;
-                default:
-                    Client.clear();
-                    for(String title : myDBManager.readfromDBforList()){
-                        Client.add(title);
-                    }
-                    //ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, Client);
-                    output_elements.setAdapter(adapter);
+            if (data == null) {return;}
+            String url = data.getStringExtra("url");
+            Random generator = new Random();
+            int n = 10000;
+            n = generator.nextInt(n);
+            String fname = "/contacts-"+ n +".lst";
+            File file = new File (url, fname);
+            Users.clear();
+            for (User user: myDBManager.getPerson()) {
+                Users.add(user);
             }
+            fileWorker.exportPersons(Users,file.getAbsolutePath());
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "Файл contacts.lst сохранен!", Toast.LENGTH_SHORT);
+            toast.show();
         }
-        else {
-            System.out.println();
-        }
+
 
     }
 
